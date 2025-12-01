@@ -1,8 +1,8 @@
+import os
 import asyncio
 import asyncssh
 
 ASCII_MESSAGE = r"""
-
 Amal says hi to
 
  Badri
@@ -11,7 +11,6 @@ Amal says hi to
  Mukundan
  Vidip
  Harish
-
 """
 
 class HelloServer(asyncssh.SSHServer):
@@ -29,12 +28,15 @@ class HelloSession(asyncssh.SSHServerSession):
 
 
 async def main():
+    # Get the port Render assigns (or default to 2222 locally)
+    port = int(os.environ.get('PORT', 2222))
+
     await asyncssh.listen(
         host="0.0.0.0",
-        port=22,                # Railway will map this to a public port
+        port=port,
         server_factory=HelloServer
     )
-    await asyncio.Future()     # Keep running
+    await asyncio.Future()  # Keep running
 
 
 if __name__ == "__main__":
